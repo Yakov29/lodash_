@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Slider with Debounce & Smooth Mouse Movement</title>
+  <style>
+    .slider {
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    .slider__input {
+      width: 100%;
+    }
+
+    .slider__image {
+      display: block;
+      margin: 20px auto;
+      max-width: 100%;
+    }
+
+    #box {
+      width: 50px;
+      height: 50px;
+      background-color: red;
+      position: absolute;
+    }
+  </style>
+</head>
+<body>
+  <div class="slider">
+    <input type="range" min="1" max="100" value="50" class="slider__input" />
+    <img src="https://via.placeholder.com/300x300" class="slider__image" />
+  </div>
+  <div id="box"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+  <script>
+    const sliderInput = document.querySelector('.slider__input');
+    const sliderImage = document.querySelector('.slider__image');
+    const box = document.getElementById('box');
+
+    const _debounce = _.debounce;
+
+    function handleSliderChange() {
+      const imageSize = 300 + (sliderInput.value - 50) * 2;
+      sliderImage.style.width = `${imageSize}px`;
+    }
+
+    const debouncedHandleSliderChange = _.debounce(handleSliderChange, 200);
+
+    sliderInput.addEventListener('input', debouncedHandleSliderChange);
+
+    function handleMouseMove(event) {
+      box.style.left = `${event.clientX}px`;
+      box.style.top = `${event.clientY}px`;
+    }
+
+    const debouncedHandleMouseMove = _.debounce(handleMouseMove, 100);
+
+    document.addEventListener('mousemove', debouncedHandleMouseMove);
+  </script>
+</body>
+</html>
